@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { NavLink, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import {
   LayoutDashboard, Package, ShoppingCart, ChefHat, Warehouse, Building2,
   Users, ArrowLeftRight, BarChart3, Bell, Settings, LogOut, CookingPot,
