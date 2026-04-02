@@ -7,9 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 
 const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, user, getDefaultRoute } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('rajesh@thatha.com');
+  const [email, setEmail] = useState('priya@thatha.com');
   const [password, setPassword] = useState('password');
   const [showPw, setShowPw] = useState(false);
   const [hubCode, setHubCode] = useState('');
@@ -17,17 +17,20 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [attempts, setAttempts] = useState(0);
 
+  // If already logged in, redirect
+  if (user) {
+    navigate(getDefaultRoute(), { replace: true });
+    return null;
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (attempts >= 5) return;
     if (login(email, password)) {
-      const user = email.includes('priya') || email.includes('anitha') ? '/kitchen/dashboard'
-        : email.includes('vikram') || email.includes('suresh') ? '/warehouse/dashboard'
-        : '/admin/dashboard';
-      navigate(user);
+      // login sets user, re-render will redirect via getDefaultRoute
     } else {
       setAttempts(a => a + 1);
-      setError('Invalid credentials. Please try again.');
+      setError('Invalid credentials. Only Kitchen & Warehouse users can login here.');
     }
   };
 
@@ -35,8 +38,8 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-display font-bold"><span className="text-primary">Thatha</span> CentralHub</h1>
-          <p className="text-muted-foreground font-body mt-2">Sign in to your hub management panel</p>
+          <h1 className="text-3xl font-display font-bold"><span className="text-primary">Thatha</span> Hub</h1>
+          <p className="text-muted-foreground font-body mt-2">Kitchen & Warehouse Management</p>
         </div>
         <form onSubmit={handleSubmit} className="bg-card rounded-xl border p-6 space-y-4 shadow-sm">
           <div>
@@ -72,7 +75,7 @@ const LoginPage = () => {
             <Link to="/auth/access-key" className="text-sm text-muted-foreground hover:text-primary font-body">Sign in with Access Key instead</Link>
           </div>
         </form>
-        <p className="text-xs text-center text-muted-foreground mt-4 font-body">Demo: rajesh@thatha.com (Admin) • priya@thatha.com (Kitchen) • vikram@thatha.com (Warehouse)</p>
+        <p className="text-xs text-center text-muted-foreground mt-4 font-body">Demo: priya@thatha.com (Kitchen) • vikram@thatha.com (Warehouse)</p>
       </div>
     </div>
   );
