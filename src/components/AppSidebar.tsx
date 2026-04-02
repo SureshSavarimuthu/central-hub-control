@@ -78,6 +78,10 @@ export const AppSidebar = () => {
       </nav>
 
       <div className="p-3 border-t border-sidebar-border">
+        <div className="flex items-center justify-between px-3 py-1 mb-1">
+          <span className="text-xs text-sidebar-muted font-body">Theme</span>
+          <ThemeToggle />
+        </div>
         <NavLink to="/profile" className={({ isActive }) => cn('flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-body mb-1', isActive ? 'bg-sidebar-accent text-primary' : 'text-sidebar-foreground hover:bg-sidebar-accent')}>
           <div className="h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-semibold text-primary">
             {user?.name.charAt(0)}
