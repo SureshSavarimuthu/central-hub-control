@@ -10,22 +10,28 @@ import { dummyHubs } from '@/data/dummy';
 const ProfilePage = () => {
   const { user } = useAuth();
   const { userProfile, updateProfile, updatePassword } = useAppState();
-  if (!user) return null;
-  const hub = dummyHubs.find(h => h.id === user.hubId);
 
-  const [name, setName] = useState(userProfile.name || user.name);
-  const [email, setEmail] = useState(userProfile.email || user.email);
-  const [phone, setPhone] = useState(userProfile.phone || user.phone);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [currentPw, setCurrentPw] = useState('');
   const [newPw, setNewPw] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
   const [pwError, setPwError] = useState('');
 
   useEffect(() => {
-    if (!userProfile.name && user) {
-      updateProfile({ name: user.name, email: user.email, phone: user.phone });
+    if (user) {
+      setName(userProfile.name || user.name);
+      setEmail(userProfile.email || user.email);
+      setPhone(userProfile.phone || user.phone);
+      if (!userProfile.name) {
+        updateProfile({ name: user.name, email: user.email, phone: user.phone });
+      }
     }
-  }, []);
+  }, [user]);
+
+  if (!user) return null;
+  const hub = dummyHubs.find(h => h.id === user.hubId);
 
   const handleProfileSave = () => {
     updateProfile({ name, email, phone });
