@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { AppStateProvider } from "@/contexts/AppStateContext";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 import LoginPage from "./pages/auth/LoginPage";
@@ -14,8 +15,6 @@ import UnauthorizedPage from "./pages/auth/UnauthorizedPage";
 import KitchenDashboard from "./pages/kitchen/KitchenDashboard";
 import KitchenOrders from "./pages/kitchen/KitchenOrders";
 import KitchenProduction from "./pages/kitchen/KitchenProduction";
-import KitchenRecipes from "./pages/kitchen/KitchenRecipes";
-import KitchenFreshStock from "./pages/kitchen/KitchenFreshStock";
 import KitchenRawMaterials from "./pages/kitchen/KitchenRawMaterials";
 import WarehouseDashboard from "./pages/warehouse/WarehouseDashboard";
 import WarehouseOrders from "./pages/warehouse/WarehouseOrders";
@@ -24,12 +23,9 @@ import WarehouseRackManagement from "./pages/warehouse/WarehouseRackManagement";
 import WarehouseProcurement from "./pages/warehouse/WarehouseProcurement";
 import WarehouseDistribution from "./pages/warehouse/WarehouseDistribution";
 import WarehouseLowStockAlerts from "./pages/warehouse/WarehouseLowStockAlerts";
-import OrdersPage from "./pages/orders/OrdersPage";
-import OrderDetailPage from "./pages/orders/OrderDetailPage";
 import StockTransferList from "./pages/transfers/StockTransferList";
 import StockTransferDetail from "./pages/transfers/StockTransferDetail";
 import NotificationsPage from "./pages/NotificationsPage";
-import ReportsPage from "./pages/reports/ReportsPage";
 import SettingsPage from "./pages/settings/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
@@ -47,44 +43,38 @@ const App = () => (
         <Toaster />
         <Sonner />
         <AuthProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Navigate to="/auth/login" replace />} />
-              <Route path="/auth/login" element={<LoginPage />} />
-              <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/auth/access-key" element={<AccessKeyPage />} />
-              <Route path="/auth/unauthorized" element={<UnauthorizedPage />} />
+          <AppStateProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Navigate to="/auth/login" replace />} />
+                <Route path="/auth/login" element={<LoginPage />} />
+                <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/auth/access-key" element={<AccessKeyPage />} />
+                <Route path="/auth/unauthorized" element={<UnauthorizedPage />} />
 
-              {/* Kitchen */}
-              <Route path="/kitchen/dashboard" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenDashboard /></ProtectedRoute>} />
-              <Route path="/kitchen/orders" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenOrders /></ProtectedRoute>} />
-              <Route path="/kitchen/production" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenProduction /></ProtectedRoute>} />
-              <Route path="/kitchen/recipes" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenRecipes /></ProtectedRoute>} />
-              <Route path="/kitchen/fresh-stock" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenFreshStock /></ProtectedRoute>} />
-              <Route path="/kitchen/raw-materials" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenRawMaterials /></ProtectedRoute>} />
+                <Route path="/kitchen/dashboard" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenDashboard /></ProtectedRoute>} />
+                <Route path="/kitchen/orders" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenOrders /></ProtectedRoute>} />
+                <Route path="/kitchen/production" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenProduction /></ProtectedRoute>} />
+                <Route path="/kitchen/raw-materials" element={<ProtectedRoute allowedRoles={[...kitchenRoles]}><KitchenRawMaterials /></ProtectedRoute>} />
 
-              {/* Warehouse */}
-              <Route path="/warehouse/dashboard" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseDashboard /></ProtectedRoute>} />
-              <Route path="/warehouse/orders" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseOrders /></ProtectedRoute>} />
-              <Route path="/warehouse/inventory" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseInventory /></ProtectedRoute>} />
-              <Route path="/warehouse/rack-management" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseRackManagement /></ProtectedRoute>} />
-              <Route path="/warehouse/procurement" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseProcurement /></ProtectedRoute>} />
-              <Route path="/warehouse/distribution" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseDistribution /></ProtectedRoute>} />
-              <Route path="/warehouse/low-stock-alerts" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseLowStockAlerts /></ProtectedRoute>} />
+                <Route path="/warehouse/dashboard" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseDashboard /></ProtectedRoute>} />
+                <Route path="/warehouse/orders" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseOrders /></ProtectedRoute>} />
+                <Route path="/warehouse/inventory" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseInventory /></ProtectedRoute>} />
+                <Route path="/warehouse/rack-management" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseRackManagement /></ProtectedRoute>} />
+                <Route path="/warehouse/procurement" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseProcurement /></ProtectedRoute>} />
+                <Route path="/warehouse/distribution" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseDistribution /></ProtectedRoute>} />
+                <Route path="/warehouse/low-stock-alerts" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseLowStockAlerts /></ProtectedRoute>} />
 
-              {/* Shared */}
-              <Route path="/orders" element={<ProtectedRoute allowedRoles={[...allRoles]}><OrdersPage /></ProtectedRoute>} />
-              <Route path="/orders/:id" element={<ProtectedRoute allowedRoles={[...allRoles]}><OrderDetailPage /></ProtectedRoute>} />
-              <Route path="/stock-transfer" element={<ProtectedRoute allowedRoles={[...allRoles]}><StockTransferList /></ProtectedRoute>} />
-              <Route path="/stock-transfer/:id" element={<ProtectedRoute allowedRoles={[...allRoles]}><StockTransferDetail /></ProtectedRoute>} />
-              <Route path="/notifications" element={<ProtectedRoute allowedRoles={[...allRoles]}><NotificationsPage /></ProtectedRoute>} />
-              <Route path="/reports/orders" element={<ProtectedRoute allowedRoles={[...allRoles]}><ReportsPage /></ProtectedRoute>} />
-              <Route path="/settings/general" element={<ProtectedRoute allowedRoles={[...allRoles]}><SettingsPage /></ProtectedRoute>} />
-              <Route path="/profile" element={<ProtectedRoute allowedRoles={[...allRoles]}><ProfilePage /></ProtectedRoute>} />
+                <Route path="/stock-transfer" element={<ProtectedRoute allowedRoles={[...allRoles]}><StockTransferList /></ProtectedRoute>} />
+                <Route path="/stock-transfer/:id" element={<ProtectedRoute allowedRoles={[...allRoles]}><StockTransferDetail /></ProtectedRoute>} />
+                <Route path="/notifications" element={<ProtectedRoute allowedRoles={[...allRoles]}><NotificationsPage /></ProtectedRoute>} />
+                <Route path="/settings/general" element={<ProtectedRoute allowedRoles={[...allRoles]}><SettingsPage /></ProtectedRoute>} />
+                <Route path="/profile" element={<ProtectedRoute allowedRoles={[...allRoles]}><ProfilePage /></ProtectedRoute>} />
 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </AppStateProvider>
         </AuthProvider>
       </TooltipProvider>
     </ThemeProvider>
