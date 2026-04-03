@@ -12,8 +12,8 @@ const statusConfig: Record<OrderStatus, { bg: string; text: string }> = {
   'On Hold': { bg: 'bg-status-on-hold/15', text: 'text-status-on-hold' },
 };
 
-export const StatusChip = ({ status, className }: { status: OrderStatus; className?: string }) => {
-  const config = statusConfig[status];
+export const StatusChip = ({ status, className }: { status: string; className?: string }) => {
+  const config = statusConfig[status as OrderStatus] || { bg: 'bg-muted', text: 'text-muted-foreground' };
   return (
     <span className={cn('inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold font-body transition-colors duration-200', config.bg, config.text, className)}>
       <span className={cn('w-1.5 h-1.5 rounded-full mr-1.5', config.text.replace('text-', 'bg-'))} />

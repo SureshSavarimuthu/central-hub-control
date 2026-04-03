@@ -12,12 +12,10 @@ const LoginPage = () => {
   const [email, setEmail] = useState('priya@thatha.com');
   const [password, setPassword] = useState('password');
   const [showPw, setShowPw] = useState(false);
-  const [hubCode, setHubCode] = useState('');
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState('');
   const [attempts, setAttempts] = useState(0);
 
-  // If already logged in, redirect
   if (user) {
     navigate(getDefaultRoute(), { replace: true });
     return null;
@@ -27,7 +25,7 @@ const LoginPage = () => {
     e.preventDefault();
     if (attempts >= 5) return;
     if (login(email, password)) {
-      // login sets user, re-render will redirect via getDefaultRoute
+      // redirect handled by re-render
     } else {
       setAttempts(a => a + 1);
       setError('Invalid credentials. Only Kitchen & Warehouse users can login here.');
@@ -54,10 +52,6 @@ const LoginPage = () => {
                 {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
-          </div>
-          <div>
-            <Label className="font-body">Hub Code <span className="text-muted-foreground">(optional)</span></Label>
-            <Input value={hubCode} onChange={e => setHubCode(e.target.value)} placeholder="KTN-CH-01" className="mt-1 font-code" />
           </div>
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm font-body cursor-pointer">
