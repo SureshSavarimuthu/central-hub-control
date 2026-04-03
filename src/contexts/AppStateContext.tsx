@@ -328,7 +328,7 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
 
   // Settings
   const updateSettingsFn = (updates: Record<string, any>) => {
-    setSettings((prev: Record<string, any>) => ({ ...prev, ...updates }));
+    setSettings((prev: any) => ({ ...prev, ...updates }));
     toast.success('Settings saved');
   };
 
