@@ -14,7 +14,6 @@ const statusConfig: Record<OrderStatus, { bg: string; text: string }> = {
 
 export const StatusChip = ({ status, className }: { status: string; className?: string }) => {
   const config = statusConfig[status as OrderStatus] || { bg: 'bg-muted', text: 'text-muted-foreground' };
-  const config = statusConfig[status];
   return (
     <span className={cn('inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold font-body transition-colors duration-200', config.bg, config.text, className)}>
       <span className={cn('w-1.5 h-1.5 rounded-full mr-1.5', config.text.replace('text-', 'bg-'))} />
