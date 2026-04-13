@@ -6,7 +6,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   if (!user) return null;
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex min-h-screen w-full bg-background">
       <AppSidebar />
       <main className="flex-1 overflow-auto">
         <div className="p-6 max-w-[1400px] mx-auto animate-fade-in">
