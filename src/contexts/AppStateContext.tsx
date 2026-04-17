@@ -52,6 +52,36 @@ interface InventoryProduct {
   locationId: string;
   category: string;
   price: number;
+  supplierId?: string;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  contact: string;
+  email: string;
+  itemsSupplied: string[];
+  notes: string;
+}
+
+export interface ProductMapping {
+  id: string;
+  productId: string;
+  productName: string;
+  ingredients: { inventoryId: string; inventoryName: string; quantity: number; unit: string }[];
+}
+
+export interface StockMovement {
+  id: string;
+  inventoryId: string;
+  inventoryName: string;
+  type: 'in' | 'out' | 'adjust';
+  quantity: number;
+  reason: string;
+  supplierId?: string;
+  supplierName?: string;
+  date: string;
+  user: string;
 }
 
 interface SubOrderState {
@@ -108,6 +138,24 @@ interface AppStateContextType {
   inventory: InventoryProduct[];
   adjustStock: (id: string, delta: number) => void;
   importInventoryCSV: (data: InventoryProduct[]) => void;
+  addInventoryItem: (item: Omit<InventoryProduct, 'id'>) => void;
+  updateInventoryItem: (id: string, updates: Partial<InventoryProduct>) => void;
+  deleteInventoryItem: (id: string) => void;
+
+  // Suppliers
+  suppliers: Supplier[];
+  addSupplier: (s: Omit<Supplier, 'id'>) => void;
+  updateSupplier: (id: string, updates: Partial<Supplier>) => void;
+  deleteSupplier: (id: string) => void;
+
+  // Product mappings
+  productMappings: ProductMapping[];
+  saveProductMapping: (productId: string, productName: string, ingredients: ProductMapping['ingredients']) => void;
+  deleteProductMapping: (id: string) => void;
+
+  // Stock movements
+  stockMovements: StockMovement[];
+  recordStockMovement: (m: Omit<StockMovement, 'id' | 'date'>) => void;
 
   // Shipments
   shipments: Shipment[];
@@ -174,6 +222,16 @@ const initialAlertConfigs: AlertConfig[] = dummyProducts.filter(p => p.locationI
   productId: p.id, inApp: true, email: true, sms: false, snoozedUntil: null
 }));
 
+const initialSuppliers: Supplier[] = [
+  { id: 's1', name: 'Sri Lakshmi Flour Mills', contact: '+91 98400 11122', email: 'orders@srilakshmiflour.in', itemsSupplied: ['Whole Wheat Flour', 'Maida Flour'], notes: 'Preferred vendor for flour' },
+  { id: 's2', name: 'Aavin Dairy', contact: '+91 98400 22334', email: 'b2b@aavin.tn.gov.in', itemsSupplied: ['Milk Packs', 'Butter'], notes: 'Daily morning delivery' },
+  { id: 's3', name: 'Sweet Gold Sugar Co', contact: '+91 98400 33445', email: 'sales@sweetgold.in', itemsSupplied: ['Sugar (Refined)'], notes: '' },
+  { id: 's4', name: 'Spice Garden Traders', contact: '+91 98400 44556', email: 'hello@spicegarden.in', itemsSupplied: ['Tea Powder', 'Cardamom'], notes: 'Bulk monthly orders' },
+];
+
+const initialProductMappings: ProductMapping[] = [];
+const initialStockMovements: StockMovement[] = [];
+
 export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [batches, setBatches] = useState<Batch[]>(() => loadState('batches', dummyBatches));
   const [subOrders, setSubOrders] = useState<SubOrderState[]>(() => loadState('subOrders', dummyOrders.flatMap(o => o.subOrders)));
@@ -187,6 +245,9 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [alertConfigs, setAlertConfigs] = useState<AlertConfig[]>(() => loadState('alertConfigs', initialAlertConfigs));
   const [userProfile, setUserProfile] = useState(() => loadState('userProfile', { name: '', email: '', phone: '', password: 'password' }));
   const [settings, setSettings] = useState(() => loadState('settings', { businessName: 'Thatha CentralHub', contactEmail: 'admin@thatha.com', defaultGst: 5, orderPrefix: 'ORD-2024-', emailNotif: true, smsNotif: false, lowStockDefault: 10 }));
+  const [suppliers, setSuppliers] = useState<Supplier[]>(() => loadState('suppliers', initialSuppliers));
+  const [productMappings, setProductMappings] = useState<ProductMapping[]>(() => loadState('productMappings', initialProductMappings));
+  const [stockMovements, setStockMovements] = useState<StockMovement[]>(() => loadState('stockMovements', initialStockMovements));
 
   // Persist all state
   useEffect(() => { saveState('batches', batches); }, [batches]);
@@ -201,6 +262,9 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => { saveState('alertConfigs', alertConfigs); }, [alertConfigs]);
   useEffect(() => { saveState('userProfile', userProfile); }, [userProfile]);
   useEffect(() => { saveState('settings', settings); }, [settings]);
+  useEffect(() => { saveState('suppliers', suppliers); }, [suppliers]);
+  useEffect(() => { saveState('productMappings', productMappings); }, [productMappings]);
+  useEffect(() => { saveState('stockMovements', stockMovements); }, [stockMovements]);
 
   // Batches
   const updateBatchStatus = (id: string, status: Batch['status'], actualYield?: number) => {
@@ -287,6 +351,61 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
     setInventory(data);
     toast.success(`Imported ${data.length} items`);
   };
+  const addInventoryItem = (item: Omit<InventoryProduct, 'id'>) => {
+    const id = `inv-${Date.now()}`;
+    setInventory(prev => [...prev, { ...item, id }]);
+    toast.success(`${item.name} added to inventory`);
+  };
+  const updateInventoryItem = (id: string, updates: Partial<InventoryProduct>) => {
+    setInventory(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    toast.success('Inventory item updated');
+  };
+  const deleteInventoryItem = (id: string) => {
+    setInventory(prev => prev.filter(p => p.id !== id));
+    toast.success('Inventory item removed');
+  };
+
+  // Suppliers
+  const addSupplier = (s: Omit<Supplier, 'id'>) => {
+    const id = `s-${Date.now()}`;
+    setSuppliers(prev => [...prev, { ...s, id }]);
+    toast.success(`Supplier ${s.name} added`);
+  };
+  const updateSupplier = (id: string, updates: Partial<Supplier>) => {
+    setSuppliers(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
+    toast.success('Supplier updated');
+  };
+  const deleteSupplier = (id: string) => {
+    setSuppliers(prev => prev.filter(s => s.id !== id));
+    toast.success('Supplier removed');
+  };
+
+  // Product mappings
+  const saveProductMapping = (productId: string, productName: string, ingredients: ProductMapping['ingredients']) => {
+    setProductMappings(prev => {
+      const existing = prev.find(m => m.productId === productId);
+      if (existing) {
+        return prev.map(m => m.productId === productId ? { ...m, productName, ingredients } : m);
+      }
+      return [...prev, { id: `pm-${Date.now()}`, productId, productName, ingredients }];
+    });
+    toast.success('Mapping saved');
+  };
+  const deleteProductMapping = (id: string) => {
+    setProductMappings(prev => prev.filter(m => m.id !== id));
+    toast.success('Mapping removed');
+  };
+
+  // Stock movements
+  const recordStockMovement = (m: Omit<StockMovement, 'id' | 'date'>) => {
+    const id = `mov-${Date.now()}`;
+    const date = new Date().toISOString();
+    setStockMovements(prev => [{ ...m, id, date }, ...prev]);
+    // Apply to inventory
+    const delta = m.type === 'in' ? m.quantity : m.type === 'out' ? -m.quantity : m.quantity;
+    setInventory(prev => prev.map(p => p.id === m.inventoryId ? { ...p, stock: Math.max(0, p.stock + delta) } : p));
+    toast.success(`${m.type === 'in' ? 'Stock in' : m.type === 'out' ? 'Stock out' : 'Adjustment'} recorded`);
+  };
 
   // Shipments
   const updateShipmentStatus = (id: string, status: Shipment['status']) => {
@@ -340,7 +459,10 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
       notifications, markNotificationRead, markAllNotificationsRead, toggleNotificationRead, unreadCount,
       rawMaterials, updateRawMaterial, addRawMaterial, deleteRawMaterial, restockRequests, addRestockRequest, updateRestockStatus,
       procurements, addProcurement, updateProcurementStatus, deleteProcurement,
-      inventory, adjustStock, importInventoryCSV,
+      inventory, adjustStock, importInventoryCSV, addInventoryItem, updateInventoryItem, deleteInventoryItem,
+      suppliers, addSupplier, updateSupplier, deleteSupplier,
+      productMappings, saveProductMapping, deleteProductMapping,
+      stockMovements, recordStockMovement,
       shipments, updateShipmentStatus, addShipment,
       alertConfigs, updateAlertConfig, snoozeAlert, lowStockAlertCount,
       userProfile, updateProfile, updatePassword,
