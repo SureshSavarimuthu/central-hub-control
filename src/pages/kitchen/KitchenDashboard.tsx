@@ -20,9 +20,16 @@ const KitchenDashboard = () => {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-display font-bold">Kitchen Dashboard</h1>
-          <p className="text-muted-foreground font-body text-sm">North Chennai Kitchen · KTN-CH-01</p>
+        <div className="flex items-center gap-3">
+          <div className="h-11 w-11 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center glow-primary">
+            <ChefHat className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-display font-extrabold tracking-tight">
+              <span className="text-primary">Kitchen</span> <span className="text-foreground">Dashboard</span>
+            </h1>
+            <p className="text-muted-foreground font-body text-sm mt-1">North Chennai Kitchen · <span className="font-code">KTN-CH-01</span></p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -32,11 +39,11 @@ const KitchenDashboard = () => {
           <KpiCard title="Efficiency" value={`${efficiency}%`} icon={TrendingUp} trend="vs 88% target" trendUp={efficiency >= 88} />
         </div>
 
-        <div className="bg-card rounded-xl border p-5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate('/kitchen/production')}>
-          <h3 className="font-display font-semibold mb-4">Production Queue</h3>
+        <div className="glass dark:glass-dark rounded-2xl border border-border/50 p-6 cursor-pointer hover:border-primary/30 hover:shadow-xl dark:hover:shadow-primary/10 transition-all" onClick={() => navigate('/kitchen/production')}>
+          <h3 className="font-display font-bold text-lg mb-4 tracking-tight">Production Queue</h3>
           <div className="space-y-3">
             {batches.slice(0, 4).map(b => (
-              <div key={b.id} className="p-4 rounded-lg bg-background border">
+              <div key={b.id} className="p-4 rounded-xl bg-muted/30 border border-border/40 hover:border-primary/20 transition-colors">
                 <div className="flex items-center justify-between mb-2">
                   <div>
                     <p className="font-body font-medium text-sm">{b.productName}</p>
@@ -62,11 +69,11 @@ const KitchenDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-card rounded-xl border p-5 cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate('/kitchen/orders')}>
-          <h3 className="font-display font-semibold mb-4">Pending Orders</h3>
+        <div className="glass dark:glass-dark rounded-2xl border border-border/50 p-6 cursor-pointer hover:border-primary/30 hover:shadow-xl dark:hover:shadow-primary/10 transition-all" onClick={() => navigate('/kitchen/orders')}>
+          <h3 className="font-display font-bold text-lg mb-4 tracking-tight">Pending Orders</h3>
           <div className="space-y-2">
             {kitchenOrders.slice(0, 5).map(s => (
-              <div key={s.id} className="flex items-center justify-between p-3 rounded-lg bg-background">
+              <div key={s.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/40 hover:border-primary/20 transition-colors">
                 <div>
                   <p className="text-sm font-code">{s.id}</p>
                   <p className="text-xs text-muted-foreground font-body">{s.items.map(i => `${i.productName} ×${i.quantity}`).join(', ')}</p>

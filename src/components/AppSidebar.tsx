@@ -111,7 +111,7 @@ export const AppSidebar = () => {
       <div className={cn('p-3 border-b border-sidebar-border flex items-center', collapsed ? 'justify-center' : 'justify-between')}>
         {!collapsed && (
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-primary/15 flex items-center justify-center">
+            <div className="h-9 w-9 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center glow-primary">
               <span className="text-sm font-display font-extrabold text-primary">T</span>
             </div>
             <div>
