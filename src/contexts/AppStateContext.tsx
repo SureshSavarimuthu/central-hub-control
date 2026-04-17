@@ -52,6 +52,36 @@ interface InventoryProduct {
   locationId: string;
   category: string;
   price: number;
+  supplierId?: string;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  contact: string;
+  email: string;
+  itemsSupplied: string[];
+  notes: string;
+}
+
+export interface ProductMapping {
+  id: string;
+  productId: string;
+  productName: string;
+  ingredients: { inventoryId: string; inventoryName: string; quantity: number; unit: string }[];
+}
+
+export interface StockMovement {
+  id: string;
+  inventoryId: string;
+  inventoryName: string;
+  type: 'in' | 'out' | 'adjust';
+  quantity: number;
+  reason: string;
+  supplierId?: string;
+  supplierName?: string;
+  date: string;
+  user: string;
 }
 
 interface SubOrderState {
