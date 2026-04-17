@@ -138,6 +138,24 @@ interface AppStateContextType {
   inventory: InventoryProduct[];
   adjustStock: (id: string, delta: number) => void;
   importInventoryCSV: (data: InventoryProduct[]) => void;
+  addInventoryItem: (item: Omit<InventoryProduct, 'id'>) => void;
+  updateInventoryItem: (id: string, updates: Partial<InventoryProduct>) => void;
+  deleteInventoryItem: (id: string) => void;
+
+  // Suppliers
+  suppliers: Supplier[];
+  addSupplier: (s: Omit<Supplier, 'id'>) => void;
+  updateSupplier: (id: string, updates: Partial<Supplier>) => void;
+  deleteSupplier: (id: string) => void;
+
+  // Product mappings
+  productMappings: ProductMapping[];
+  saveProductMapping: (productId: string, productName: string, ingredients: ProductMapping['ingredients']) => void;
+  deleteProductMapping: (id: string) => void;
+
+  // Stock movements
+  stockMovements: StockMovement[];
+  recordStockMovement: (m: Omit<StockMovement, 'id' | 'date'>) => void;
 
   // Shipments
   shipments: Shipment[];
