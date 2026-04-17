@@ -19,6 +19,10 @@ import KitchenRawMaterials from "./pages/kitchen/KitchenRawMaterials";
 import WarehouseDashboard from "./pages/warehouse/WarehouseDashboard";
 import WarehouseOrders from "./pages/warehouse/WarehouseOrders";
 import WarehouseInventory from "./pages/warehouse/WarehouseInventory";
+import InventoryDashboard from "./pages/warehouse/InventoryDashboard";
+import StockMovement from "./pages/warehouse/StockMovement";
+import ProductMapping from "./pages/warehouse/ProductMapping";
+import SupplierManagement from "./pages/warehouse/SupplierManagement";
 import WarehouseRackManagement from "./pages/warehouse/WarehouseRackManagement";
 import WarehouseProcurement from "./pages/warehouse/WarehouseProcurement";
 import WarehouseDistribution from "./pages/warehouse/WarehouseDistribution";
@@ -60,6 +64,10 @@ const App = () => (
                 <Route path="/warehouse/dashboard" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseDashboard /></ProtectedRoute>} />
                 <Route path="/warehouse/orders" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseOrders /></ProtectedRoute>} />
                 <Route path="/warehouse/inventory" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseInventory /></ProtectedRoute>} />
+                <Route path="/warehouse/inventory-dashboard" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><InventoryDashboard /></ProtectedRoute>} />
+                <Route path="/warehouse/stock-movement" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><StockMovement /></ProtectedRoute>} />
+                <Route path="/warehouse/product-mapping" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><ProductMapping /></ProtectedRoute>} />
+                <Route path="/warehouse/suppliers" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><SupplierManagement /></ProtectedRoute>} />
                 <Route path="/warehouse/rack-management" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseRackManagement /></ProtectedRoute>} />
                 <Route path="/warehouse/procurement" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseProcurement /></ProtectedRoute>} />
                 <Route path="/warehouse/distribution" element={<ProtectedRoute allowedRoles={[...warehouseRoles]}><WarehouseDistribution /></ProtectedRoute>} />
