@@ -245,6 +245,9 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [alertConfigs, setAlertConfigs] = useState<AlertConfig[]>(() => loadState('alertConfigs', initialAlertConfigs));
   const [userProfile, setUserProfile] = useState(() => loadState('userProfile', { name: '', email: '', phone: '', password: 'password' }));
   const [settings, setSettings] = useState(() => loadState('settings', { businessName: 'Thatha CentralHub', contactEmail: 'admin@thatha.com', defaultGst: 5, orderPrefix: 'ORD-2024-', emailNotif: true, smsNotif: false, lowStockDefault: 10 }));
+  const [suppliers, setSuppliers] = useState<Supplier[]>(() => loadState('suppliers', initialSuppliers));
+  const [productMappings, setProductMappings] = useState<ProductMapping[]>(() => loadState('productMappings', initialProductMappings));
+  const [stockMovements, setStockMovements] = useState<StockMovement[]>(() => loadState('stockMovements', initialStockMovements));
 
   // Persist all state
   useEffect(() => { saveState('batches', batches); }, [batches]);
