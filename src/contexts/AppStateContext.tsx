@@ -222,6 +222,16 @@ const initialAlertConfigs: AlertConfig[] = dummyProducts.filter(p => p.locationI
   productId: p.id, inApp: true, email: true, sms: false, snoozedUntil: null
 }));
 
+const initialSuppliers: Supplier[] = [
+  { id: 's1', name: 'Sri Lakshmi Flour Mills', contact: '+91 98400 11122', email: 'orders@srilakshmiflour.in', itemsSupplied: ['Whole Wheat Flour', 'Maida Flour'], notes: 'Preferred vendor for flour' },
+  { id: 's2', name: 'Aavin Dairy', contact: '+91 98400 22334', email: 'b2b@aavin.tn.gov.in', itemsSupplied: ['Milk Packs', 'Butter'], notes: 'Daily morning delivery' },
+  { id: 's3', name: 'Sweet Gold Sugar Co', contact: '+91 98400 33445', email: 'sales@sweetgold.in', itemsSupplied: ['Sugar (Refined)'], notes: '' },
+  { id: 's4', name: 'Spice Garden Traders', contact: '+91 98400 44556', email: 'hello@spicegarden.in', itemsSupplied: ['Tea Powder', 'Cardamom'], notes: 'Bulk monthly orders' },
+];
+
+const initialProductMappings: ProductMapping[] = [];
+const initialStockMovements: StockMovement[] = [];
+
 export const AppStateProvider = ({ children }: { children: ReactNode }) => {
   const [batches, setBatches] = useState<Batch[]>(() => loadState('batches', dummyBatches));
   const [subOrders, setSubOrders] = useState<SubOrderState[]>(() => loadState('subOrders', dummyOrders.flatMap(o => o.subOrders)));
