@@ -17,9 +17,16 @@ const WarehouseDashboard = () => {
   return (
     <AppLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-display font-bold">Warehouse Dashboard</h1>
-          <p className="text-muted-foreground font-body text-sm">Central Warehouse · WH-CH-01</p>
+        <div className="flex items-center gap-3">
+          <div className="h-11 w-11 rounded-2xl bg-info/10 border border-info/20 flex items-center justify-center glow-info">
+            <Warehouse className="h-5 w-5 text-info" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-display font-extrabold tracking-tight">
+              <span className="text-primary">Warehouse</span> <span className="text-foreground">Dashboard</span>
+            </h1>
+            <p className="text-muted-foreground font-body text-sm mt-1">Central Warehouse · <span className="font-code">WH-CH-01</span></p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -30,11 +37,11 @@ const WarehouseDashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-card rounded-xl border p-5 hover:shadow-lg transition-shadow dark:hover:shadow-primary/5">
-            <h3 className="font-display font-semibold mb-4">Pending Dispatch</h3>
+          <div className="glass dark:glass-dark rounded-2xl border border-border/50 p-6 hover:border-primary/30 hover:shadow-xl dark:hover:shadow-primary/10 transition-all">
+            <h3 className="font-display font-bold text-lg mb-4 tracking-tight">Pending Dispatch</h3>
             <div className="space-y-2">
               {pendingDispatch.length > 0 ? pendingDispatch.map(s => (
-                <div key={s.id} className="flex items-center justify-between p-3 rounded-lg bg-background hover:bg-muted/30 transition-colors">
+                <div key={s.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/40 hover:border-primary/20 transition-colors">
                   <div>
                     <p className="text-sm font-code">{s.id}</p>
                     <p className="text-xs text-muted-foreground font-body">{s.items.map(i => i.productName).join(', ')}</p>
@@ -44,11 +51,11 @@ const WarehouseDashboard = () => {
               )) : <p className="text-sm text-muted-foreground font-body">No pending dispatches</p>}
             </div>
           </div>
-          <div className="bg-card rounded-xl border p-5 hover:shadow-lg transition-shadow dark:hover:shadow-primary/5">
-            <h3 className="font-display font-semibold mb-4">Low Stock Items</h3>
+          <div className="glass dark:glass-dark rounded-2xl border border-border/50 p-6 hover:border-destructive/30 hover:shadow-xl dark:hover:shadow-primary/10 transition-all">
+            <h3 className="font-display font-bold text-lg mb-4 tracking-tight">Low Stock Items</h3>
             <div className="space-y-2">
               {inventory.filter(p => p.stock <= p.lowStockThreshold).map(p => (
-                <div key={p.id} className="flex items-center justify-between p-3 rounded-lg bg-background border-l-4 border-l-destructive">
+                <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-destructive/5 border border-destructive/20 border-l-4 border-l-destructive">
                   <div>
                     <p className="text-sm font-body font-medium">{p.name}</p>
                     <p className="text-xs text-muted-foreground font-code">{p.sku}</p>
@@ -60,11 +67,11 @@ const WarehouseDashboard = () => {
           </div>
         </div>
 
-        <div className="bg-card rounded-xl border p-5 hover:shadow-lg transition-shadow dark:hover:shadow-primary/5">
-          <h3 className="font-display font-semibold mb-4">Incoming Deliveries</h3>
+        <div className="glass dark:glass-dark rounded-2xl border border-border/50 p-6 hover:border-primary/30 hover:shadow-xl dark:hover:shadow-primary/10 transition-all">
+          <h3 className="font-display font-bold text-lg mb-4 tracking-tight">Incoming Deliveries</h3>
           <div className="space-y-2">
             {procurements.filter(p => ['Confirmed', 'Submitted'].includes(p.status)).map(po => (
-              <div key={po.id} className="flex items-center justify-between p-3 rounded-lg bg-background">
+              <div key={po.id} className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border/40 hover:border-primary/20 transition-colors">
                 <div>
                   <p className="text-sm font-body font-medium">{po.material}</p>
                   <p className="text-xs text-muted-foreground font-body">{po.vendorName} · <span className="font-code">{po.poNumber}</span></p>
