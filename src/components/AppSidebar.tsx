@@ -9,7 +9,8 @@ import {
   LayoutDashboard, ShoppingCart, Warehouse,
   ArrowLeftRight, Bell, LogOut, CookingPot,
   PackageSearch, Truck, AlertTriangle, Boxes, Grid3X3,
-  PanelLeftClose, PanelLeftOpen, ChevronRight
+  PanelLeftClose, PanelLeftOpen, ChevronRight,
+  Package, RotateCw, Cookie
 } from 'lucide-react';
 
 const kitchenLinks = [
@@ -23,10 +24,14 @@ const kitchenLinks = [
 
 const warehouseLinks = [
   { to: '/warehouse/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/warehouse/inventory-dashboard', label: 'Inventory Hub', icon: Package },
+  { to: '/warehouse/inventory', label: 'Inventory List', icon: Warehouse },
+  { to: '/warehouse/stock-movement', label: 'Stock Movement', icon: RotateCw },
+  { to: '/warehouse/product-mapping', label: 'Product Mapping', icon: Cookie },
+  { to: '/warehouse/suppliers', label: 'Suppliers', icon: Truck },
   { to: '/warehouse/orders', label: 'Dispatch Queue', icon: ShoppingCart },
-  { to: '/warehouse/inventory', label: 'Inventory', icon: Warehouse },
   { to: '/warehouse/rack-management', label: 'Rack Mgmt', icon: Grid3X3 },
-  { to: '/warehouse/procurement', label: 'Procurement', icon: Truck },
+  { to: '/warehouse/procurement', label: 'Procurement', icon: Boxes },
   { to: '/warehouse/distribution', label: 'Distribution', icon: Boxes },
   { to: '/warehouse/low-stock-alerts', label: 'Alerts', icon: AlertTriangle },
   { to: '/stock-transfer', label: 'Transfers', icon: ArrowLeftRight },
