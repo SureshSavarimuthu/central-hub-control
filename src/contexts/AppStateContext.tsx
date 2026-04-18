@@ -279,8 +279,51 @@ export const AppStateProvider = ({ children }: { children: ReactNode }) => {
 
   // Sub-orders
   const updateSubOrderStatus = (id: string, status: string) => {
+    const subOrder = subOrders.find(s => s.id === id);
     setSubOrders(prev => prev.map(s => s.id === id ? { ...s, status, updatedAt: new Date().toISOString() } : s));
     toast.success(`Order ${id} updated to ${status}`);
+
+    // Auto-deduct inventory on dispatch (warehouse only)
+    if (status === 'Out for Delivery' && subOrder && subOrder.hubId === 'h3') {
+      const deductions: { name: string; qty: number; unit: string }[] = [];
+      const movementsToRecord: Omit<StockMovement, 'id' | 'date'>[] = [];
+      const inventoryDeltas: Record<string, number> = {};
+
+      subOrder.items.forEach(item => {
+        const mapping = productMappings.find(m => m.productId === item.productId);
+        if (!mapping) return;
+        mapping.ingredients.forEach(ing => {
+          const totalQty = ing.quantity * item.quantity;
+          inventoryDeltas[ing.inventoryId] = (inventoryDeltas[ing.inventoryId] || 0) + totalQty;
+          deductions.push({ name: ing.inventoryName, qty: totalQty, unit: ing.unit });
+          movementsToRecord.push({
+            inventoryId: ing.inventoryId,
+            inventoryName: ing.inventoryName,
+            type: 'out',
+            quantity: totalQty,
+            reason: `Auto-deducted for order ${id}`,
+            date: undefined as any,
+            user: 'System',
+          } as any);
+        });
+      });
+
+      if (deductions.length > 0) {
+        setInventory(prev => prev.map(p =>
+          inventoryDeltas[p.id] !== undefined
+            ? { ...p, stock: Math.max(0, p.stock - inventoryDeltas[p.id]) }
+            : p
+        ));
+        const now = new Date().toISOString();
+        setStockMovements(prev => [
+          ...movementsToRecord.map((m, idx) => ({ ...m, id: `mov-${Date.now()}-${idx}`, date: now })),
+          ...prev,
+        ]);
+        // Aggregate toast message
+        const summary = deductions.map(d => `${d.name} −${d.qty}${d.unit}`).join(', ');
+        toast.success(`Inventory auto-deducted: ${summary}`, { duration: 6000 });
+      }
+    }
   };
 
   // Transfers
